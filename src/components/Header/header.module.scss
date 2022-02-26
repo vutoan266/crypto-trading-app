@@ -1,0 +1,85 @@
+@import '../../variables.scss';
+
+.header {
+  background-color: white;
+  height: 70px;
+  padding: 0 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  .logo {
+    font-size: 24px;
+    font-weight: 600;
+    padding: 15px 0px;
+    width: 200px;
+  }
+
+  .nav {
+    flex: 1;
+    max-width: 992px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    .navItem {
+      float: left;
+      display: block;
+      text-align: center;
+      padding: 14px 20px;
+      text-decoration: none;
+      margin-right: 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      color: $secondaryText;
+
+      &:hover:not(.active) {
+        background-color: #f8f9fd;
+      }
+    }
+    .active {
+      .navItem {
+        color: $primaryGreen;
+        background-color: $secondaryGreen;
+      }
+    }
+  }
+
+  .user {
+    width: 200px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .loginIcon {
+      border-radius: 6px;
+      font-size: 30px;
+      padding: 5px;
+      cursor: pointer;
+      color: $secondaryText;
+
+      &:hover {
+        background-color: $secondaryGreen;
+        color: $primaryGreen;
+      }
+    }
+    .logoutIcon {
+      border-radius: 6px;
+      font-size: 30px;
+      padding: 5px;
+      cursor: pointer;
+      color: $secondaryText;
+
+      &:hover {
+        background-color: $secondaryOrange;
+        color: $primaryOrange;
+      }
+    }
+  }
+}
