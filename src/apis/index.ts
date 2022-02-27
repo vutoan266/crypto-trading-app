@@ -18,5 +18,7 @@ export const getTradeRateAPI = async ({
     `https://rest-sandbox.coinapi.io/v1/exchangerate/${base}/${quote}`,
   );
 
+// CANNOT fetch asset icons due to dont know iconSize, api docs is not clearly :(
+
 // export const getAllAssetIconsAPI = async () =>
 //   request.get('https://rest-sandbox.coinapi.io/v1/assets/icons/64');

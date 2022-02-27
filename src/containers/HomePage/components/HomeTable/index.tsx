@@ -10,6 +10,7 @@ import {
 } from 'react-icons/ti';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import Button from 'src/components/Common/Button';
+import ReactLoading from 'react-loading';
 
 const DEFAULT_SHOWING_NUMBER = 10;
 const STEP_SHOWING_NUMBER = 10;
@@ -71,7 +72,9 @@ const HomeTable: React.FC<HomePageProps> = (props: HomePageProps) => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {isLoading && <AiOutlineLoading3Quarters />}
+          {isLoading && (
+            <ReactLoading type="bars" color="#fe5330" height={50} width={50} />
+          )}
           {showingRows.map((row, i) => {
             prepareRow(row);
             return (

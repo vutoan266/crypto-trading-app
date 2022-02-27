@@ -6,6 +6,7 @@ import { MdSwapVert } from 'react-icons/md';
 import { useQuery } from 'react-query';
 import { getTradeAssetsAPI, getTradeRateAPI } from 'src/apis';
 import classNames from 'classnames';
+import useUserStore from 'src/stores/userStore';
 
 const FIAT_TYPE = 'USD';
 
@@ -15,6 +16,7 @@ const TradePage: React.FC = () => {
   const [assetType, setAssetType] = useState('');
   const [fiatAmount, setFiatAmount] = useState(0);
   const { data: assetList } = useQuery('tradeList', getTradeAssetsAPI);
+  const { user, setIsLoginOpen } = useUserStore();
 
   const assetOptions = useMemo(() => {
     if (!assetList) return [];
@@ -50,36 +52,39 @@ const TradePage: React.FC = () => {
     }
   }, [fiatAmount, isAssetFirst]);
 
+  // can improve the input by use DEBOUNCE function to avoid call api too quickly
   return (
     <div className={styles.trade}>
-      <div
-        className={classNames(styles.tradeInputWrapper, {
-          [styles.reverse]: !isAssetFirst,
-        })}>
-        <AssetNumberInput
-          value={{ value: assetAmount, asset: assetType }}
-          assetOptions={assetOptions}
-          onChange={newValue => {
-            setAssetAmount(newValue.value);
-            setAssetType(newValue.asset);
-          }}
-          inputDisable={!isAssetFirst}
-        />
-        <AssetNumberInput
-          value={{ value: fiatAmount, asset: FIAT_TYPE }}
-          assetOptions={[{ label: FIAT_TYPE, value: FIAT_TYPE }]}
-          onChange={newValue => setFiatAmount(newValue.value)}
-          inputDisable={isAssetFirst}
-        />
+      <fieldset
+        disabled={!user}
+        onClick={!user ? () => setIsLoginOpen(true) : undefined}>
         <div
-          className={styles.swapBtn}
-          onClick={() => setIsAssetFirst(!isAssetFirst)}>
-          <MdSwapVert />
+          className={classNames(styles.tradeInputWrapper, {
+            [styles.reverse]: !isAssetFirst,
+          })}>
+          <AssetNumberInput
+            value={{ value: assetAmount, asset: assetType }}
+            assetOptions={assetOptions}
+            onChange={newValue => {
+              setAssetAmount(newValue.value);
+              setAssetType(newValue.asset);
+            }}
+            inputDisable={!isAssetFirst}
+          />
+          <AssetNumberInput
+            value={{ value: fiatAmount, asset: FIAT_TYPE }}
+            assetOptions={[{ label: FIAT_TYPE, value: FIAT_TYPE }]}
+            onChange={newValue => setFiatAmount(newValue.value)}
+            inputDisable={isAssetFirst}
+          />
+          <div
+            className={styles.swapBtn}
+            onClick={() => setIsAssetFirst(!isAssetFirst)}>
+            <MdSwapVert />
+          </div>
         </div>
-      </div>
-      <Button onClick={() => null} className={styles.tradeBtn}>
-        Trade
-      </Button>
+        <Button className={styles.tradeBtn}>Trade</Button>
+      </fieldset>
     </div>
   );
 };

@@ -5,7 +5,7 @@
   color: $primaryGreen;
   font-size: 18px;
   font-weight: 500;
-  padding: 14px;
+  padding: 10px 15px;
   text-align: center;
   border-radius: 20px;
   outline: none;
@@ -19,7 +19,6 @@
   align-items: center;
   cursor: pointer;
   position: relative;
-  z-index: 1;
   will-change: transform;
   transition: transform 450ms ease 0s;
   transform: perspective(1px) translateZ(0px);

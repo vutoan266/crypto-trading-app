@@ -1,0 +1,40 @@
+.login {
+  width: 400px;
+  height: 280px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  box-shadow: rgba(0, 0, 0, 0.01) 0px 0px 1px, rgba(0, 0, 0, 0.04) 0px 4px 8px,
+    rgba(0, 0, 0, 0.04) 0px 16px 24px, rgba(0, 0, 0, 0.01) 0px 24px 32px;
+  border-radius: 24px;
+  border: 1px solid #efefef;
+  padding: 25px;
+  z-index: 999999;
+
+  .loginForm {
+    .title {
+      margin-bottom: 40px;
+    }
+    .formItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      div {
+        width: 150px;
+      }
+      input {
+        flex: 1;
+      }
+    }
+    .loginBtn {
+      margin: 50px auto 0 auto;
+      width: 200px;
+    }
+    .errorMessage {
+      color: red;
+    }
+  }
+}
