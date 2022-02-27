@@ -14,13 +14,19 @@
     border-radius: 16px;
     outline: none;
     user-select: none;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 500;
     height: 2.4rem;
     width: initial;
 
     &:hover {
       background-color: $primaryGrey;
+    }
+    option {
+      cursor: pointer;
+    }
+    option[value=''][disabled] {
+      display: none;
     }
   }
 }

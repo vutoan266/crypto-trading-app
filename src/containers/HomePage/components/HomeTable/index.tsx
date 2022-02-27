@@ -1,41 +1,47 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import styles from './homeTable.module.scss';
-import { useTable, useSortBy } from 'react-table';
+import { useTable, useSortBy, Column } from 'react-table';
 import { CoinType } from 'src/types';
+import useHomeTableColumn from './useHomeTableColumn';
+import {
+  TiArrowSortedDown,
+  TiArrowSortedUp,
+  TiArrowUnsorted,
+} from 'react-icons/ti';
+import Button from 'src/components/Common/Button';
 
-const data: CoinType[] = [
-  {
-    name: 'hi',
-    price: 1000,
-  },
-  {
-    name: 'aa',
-    price: 1000,
-  },
-];
+const DEFAULT_SHOWING_NUMBER = 10;
+const STEP_SHOWING_NUMBER = 10;
+interface HomePageProps {
+  data: CoinType[];
+}
 
-const HomeTable: React.FC = props => {
+const HomeTable: React.FC<HomePageProps> = (props: HomePageProps) => {
+  const { data } = props;
+  const [showingNumber, setShowingNumber] = React.useState(
+    DEFAULT_SHOWING_NUMBER,
+  );
+  const columns = useHomeTableColumn();
+
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       {
-        columns: [
-          {
-            Header: 'Coin Name',
-            accessor: (row: CoinType) => row.name,
-          },
-          {
-            Header: 'Price',
-            accessor: 'price',
-          },
-          {
-            Header: 'Action',
-            accessor: () => 'hihi',
-          },
-        ],
-        data: data,
+        columns: columns,
+        data: data || [],
       },
       useSortBy,
     );
+
+  const handleLoadMore = useCallback(() => {
+    setShowingNumber(prev => prev + STEP_SHOWING_NUMBER);
+  }, []);
+
+  const { showingRows, hasMore } = useMemo(() => {
+    return {
+      showingRows: rows.slice(0, showingNumber),
+      hasMore: showingNumber < rows.length,
+    };
+  }, [showingNumber, rows]);
 
   return (
     <div className={styles.homeTable}>
@@ -44,17 +50,18 @@ const HomeTable: React.FC = props => {
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                // Add the sorting props to control sorting. For this example
-                // we can add them into the header props
                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render('Header')}
-                  {/* Add a sort direction indicator */}
                   <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? ' 🔽'
-                        : ' 🔼'
-                      : ''}
+                    {column.isSorted ? (
+                      column.isSortedDesc ? (
+                        <TiArrowSortedDown />
+                      ) : (
+                        <TiArrowSortedUp />
+                      )
+                    ) : column.canSort ? (
+                      <TiArrowUnsorted />
+                    ) : null}
                   </span>
                 </th>
               ))}
@@ -62,7 +69,7 @@ const HomeTable: React.FC = props => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
+          {showingRows.map((row, i) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
@@ -76,6 +83,11 @@ const HomeTable: React.FC = props => {
           })}
         </tbody>
       </table>
+      {hasMore && (
+        <Button className={styles.loadMoreBtn} onClick={handleLoadMore}>
+          See more
+        </Button>
+      )}
     </div>
   );
 };

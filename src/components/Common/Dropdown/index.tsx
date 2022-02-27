@@ -6,21 +6,24 @@ export interface DropdownOptionsType {
   value: string;
 }
 
-interface DropdownProps {
+interface DropdownProps
+  extends Omit<React.HTMLProps<HTMLSelectElement>, 'onChange'> {
   value: string;
   options: DropdownOptionsType[];
   onChange: (value: string) => void;
 }
 
 const Dropdown = (props: DropdownProps) => {
-  const { value, options, onChange } = props;
+  const { value, options, onChange, placeholder, ...selectProps } = props;
   return (
     <div className={styles.dropdown}>
       <select
-        name="cars"
-        id="cars"
         value={value}
-        onChange={e => onChange(e.target.value)}>
+        onChange={e => onChange(e.target.value)}
+        {...selectProps}>
+        <option value="" disabled selected>
+          {placeholder}
+        </option>
         {options?.map(item => (
           <option value={item.value}>{item.label}</option>
         ))}
