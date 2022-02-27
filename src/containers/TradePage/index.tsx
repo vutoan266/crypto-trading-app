@@ -1,28 +1,85 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Button from 'src/components/Common/Button';
 import AssetNumberInput from './components/AssetNumberInput';
 import styles from './trade.module.scss';
 import { MdSwapVert } from 'react-icons/md';
+import { useQuery } from 'react-query';
+import { getTradeAssetsAPI, getTradeRateAPI } from 'src/apis';
+import classNames from 'classnames';
+
+const FIAT_TYPE = 'USD';
 
 const TradePage: React.FC = () => {
+  const [isAssetFirst, setIsAssetFirst] = useState(true);
+  const [assetAmount, setAssetAmount] = useState(0);
+  const [assetType, setAssetType] = useState('');
+  const [fiatAmount, setFiatAmount] = useState(0);
+  const { data: assetList } = useQuery('tradeList', getTradeAssetsAPI);
+
+  const assetOptions = useMemo(() => {
+    if (!assetList) return [];
+    if (!assetType) setAssetType('BTC');
+    return assetList
+      .filter(item => item.type_is_crypto === 1)
+      .map(item => ({ label: item.name, value: item.name }));
+  }, [assetList]);
+
+  useEffect(() => {
+    // when Asset on Top
+    if (assetAmount && isAssetFirst) {
+      getTradeRateAPI({
+        base: assetType,
+        quote: FIAT_TYPE,
+      }).then(res => {
+        const { rate } = res;
+        setFiatAmount(assetAmount * rate);
+      });
+    }
+  }, [assetAmount, assetType, isAssetFirst]);
+
+  useEffect(() => {
+    // when Fiat on Top
+    if (fiatAmount && !isAssetFirst) {
+      getTradeRateAPI({
+        base: FIAT_TYPE,
+        quote: assetType,
+      }).then(res => {
+        const { rate } = res;
+        setAssetAmount(fiatAmount * rate);
+      });
+    }
+  }, [fiatAmount, isAssetFirst]);
+
   return (
     <div className={styles.trade}>
-      <div className={styles.tradeInputWrapper}>
+      <div
+        className={classNames(styles.tradeInputWrapper, {
+          [styles.reverse]: !isAssetFirst,
+        })}>
         <AssetNumberInput
-          value={{ value: 123, asset: 'hihi' }}
-          assetOptions={[{ label: 'hjihi', value: 'hihi' }]}
-          onChange={() => null}
+          value={{ value: assetAmount, asset: assetType }}
+          assetOptions={assetOptions}
+          onChange={newValue => {
+            setAssetAmount(newValue.value);
+            setAssetType(newValue.asset);
+          }}
+          inputDisable={!isAssetFirst}
         />
         <AssetNumberInput
-          value={{ value: 123, asset: 'hihi' }}
-          assetOptions={[{ label: 'hjihi', value: 'hihi' }]}
-          onChange={() => null}
+          value={{ value: fiatAmount, asset: FIAT_TYPE }}
+          assetOptions={[{ label: FIAT_TYPE, value: FIAT_TYPE }]}
+          onChange={newValue => setFiatAmount(newValue.value)}
+          inputDisable={isAssetFirst}
         />
-        <div className={styles.swapBtn}>
+        <div
+          className={styles.swapBtn}
+          onClick={() => setIsAssetFirst(!isAssetFirst)}>
           <MdSwapVert />
         </div>
       </div>
-      <Button onClick={() => null}>Trade</Button>
+      <Button onClick={() => null} className={styles.tradeBtn}>
+        Trade
+      </Button>
     </div>
   );
 };

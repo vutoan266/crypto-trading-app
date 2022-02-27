@@ -8,16 +8,18 @@ import {
   TiArrowSortedUp,
   TiArrowUnsorted,
 } from 'react-icons/ti';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import Button from 'src/components/Common/Button';
 
 const DEFAULT_SHOWING_NUMBER = 10;
 const STEP_SHOWING_NUMBER = 10;
 interface HomePageProps {
   data: CoinType[];
+  isLoading?: boolean;
 }
 
 const HomeTable: React.FC<HomePageProps> = (props: HomePageProps) => {
-  const { data } = props;
+  const { data, isLoading } = props;
   const [showingNumber, setShowingNumber] = React.useState(
     DEFAULT_SHOWING_NUMBER,
   );
@@ -69,6 +71,7 @@ const HomeTable: React.FC<HomePageProps> = (props: HomePageProps) => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
+          {isLoading && <AiOutlineLoading3Quarters />}
           {showingRows.map((row, i) => {
             prepareRow(row);
             return (

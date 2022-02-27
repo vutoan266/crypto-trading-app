@@ -4,7 +4,7 @@ const get = (url: string, data?: any) => {
   const requestOptions = {
     method: 'GET',
     headers: {
-      'X-CoinAPI-Key': 'E18F254B-C4B8-4E2D-A177-40BCA265A038',
+      'X-CoinAPI-Key': '8CE6A6C9-325B-470E-9522-2574B65B02BB',
     },
   };
   return fetch(`${url}${urlString}`, requestOptions)

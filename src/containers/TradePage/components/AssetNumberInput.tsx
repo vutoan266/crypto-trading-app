@@ -6,10 +6,11 @@ interface AssetNumberInputProps {
   value: { value: number; asset: string };
   assetOptions: DropdownOptionsType[];
   onChange: (value: { value: number; asset: string }) => void;
+  inputDisable?: boolean;
 }
 
 const AssetNumberInput = (props: AssetNumberInputProps) => {
-  const { value, assetOptions, onChange } = props;
+  const { value, assetOptions, onChange, inputDisable } = props;
 
   return (
     <div className={styles.assetNumberInput}>
@@ -19,15 +20,17 @@ const AssetNumberInput = (props: AssetNumberInputProps) => {
         onChange={e =>
           onChange({
             ...value,
-            value: parseFloat(e.target.value) || 0,
+            value: parseFloat(e.target.value),
           })
         }
         placeholder="0.0"
+        disabled={inputDisable}
       />
       <Dropdown
         value={value.asset}
         options={assetOptions}
         onChange={(newAsset: string) => onChange({ ...value, asset: newAsset })}
+        className={styles.assetDropdown}
       />
     </div>
   );

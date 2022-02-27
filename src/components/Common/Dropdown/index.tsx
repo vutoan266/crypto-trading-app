@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import styles from './dropdown.module.scss';
 
@@ -14,21 +15,21 @@ interface DropdownProps
 }
 
 const Dropdown = (props: DropdownProps) => {
-  const { value, options, onChange, placeholder, ...selectProps } = props;
+  const { value, options, onChange, placeholder, className, ...selectProps } =
+    props;
   return (
-    <div className={styles.dropdown}>
-      <select
-        value={value}
-        onChange={e => onChange(e.target.value)}
-        {...selectProps}>
-        <option value="" disabled selected>
-          {placeholder}
-        </option>
-        {options?.map(item => (
-          <option value={item.value}>{item.label}</option>
-        ))}
-      </select>
-    </div>
+    <select
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      className={classNames(styles.dropdown, className)}
+      {...selectProps}>
+      <option value="" disabled selected>
+        {placeholder}
+      </option>
+      {options?.map(item => (
+        <option value={item.value}>{item.label}</option>
+      ))}
+    </select>
   );
 };
 

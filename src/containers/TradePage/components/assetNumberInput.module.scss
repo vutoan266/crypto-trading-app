@@ -11,8 +11,12 @@
   height: 50px;
   padding: 10px 18px;
 
+  .assetDropdown {
+    width: 110px;
+    text-align: center;
+  }
+
   input {
-    width: 100%;
     font-size: 25px;
     margin-right: 15px;
     background-color: $secondaryGrey;
