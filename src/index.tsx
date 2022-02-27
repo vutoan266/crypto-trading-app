@@ -13,10 +13,10 @@ const App = () => {
       <div className={styles.app}>
         <Header />
         <Switch>
-          <Route path={ROUTE.HOME_PAGE}>
+          <Route exact path={ROUTE.HOME_PAGE}>
             <HomePage />
           </Route>
-          <Route path={ROUTE.TRADE_PAGE}>
+          <Route exact path={ROUTE.TRADE_PAGE}>
             <TradePage />
           </Route>
         </Switch>
